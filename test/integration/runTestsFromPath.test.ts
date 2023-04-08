@@ -3,9 +3,9 @@ import * as chai from "chai";
 import * as ts from "typescript";
 import * as fs from "fs-extra";
 import * as path from "path";
-import * as chaiSubset from "chai-subset";
+import chaiSubset from "chai-subset";
 import * as flatMap from "array.prototype.flatmap";
-import { CLIEngine } from "eslint";
+import { ESLint } from "eslint";
 import * as dotEnv from "dotenv"
 import EntityFileToJson from "../utils/EntityFileToJson";
 import { createDriver, dataCollectionPhase } from "../../src/Engine";
@@ -325,7 +325,7 @@ function compareGeneratedFiles(filesOrgPathTS: string, filesGenPath: string) {
 
 // TODO: Move(?)
 // eslint-disable-next-line import/prefer-default-export
-export function compileGeneratedModel(
+export async function compileGeneratedModel(
     filesGenPath: string,
     drivers: string[],
     lintGeneratedFiles = true
@@ -360,17 +360,23 @@ export function compileGeneratedModel(
     ).to.equal(true);
 
     if (lintGeneratedFiles) {
-        const cli = new CLIEngine({ configFile: "test/configs/.eslintrc.js" });
-        const lintReport = cli.executeOnFiles(currentDirectoryFiles);
-        lintReport.results.forEach(result =>
+        const eslint = new ESLint({ overrideConfigFile: "test/configs/.eslintrc.js" });
+        const lintReport = await eslint.lintFiles(currentDirectoryFiles);
+        let errorCount = 0;
+        let warningCount = 0;
+
+        lintReport.forEach(result => {
+            errorCount += result.errorCount;
+            warningCount += result.warningCount;
+
             result.messages.forEach(message => {
                 console.error(
                     `${result.filePath}:${message.line} - ${message.message}`
                 );
             })
-        );
-        expect(lintReport.errorCount).to.equal(0);
-        expect(lintReport.warningCount).to.equal(0);
+        });
+        expect(errorCount).to.equal(0);
+        expect(warningCount).to.equal(0);
     }
 }
 

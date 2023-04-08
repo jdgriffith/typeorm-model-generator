@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as fs from "fs-extra";
 import * as chai from "chai";
-import * as chaiSubset from "chai-subset";
+import chaiSubset from "chai-subset";
 import { Entity } from "../../src/models/Entity";
 import modelCustomizationPhase from "../../src/ModelCustomization";
 import { getDefaultGenerationOptions } from "../../src/IGenerationOptions";
@@ -103,7 +103,7 @@ describe("Model customization phase", async () => {
                     fieldName: "authorId",
                     relatedField: "Post",
                     joinColumnOptions: [
-                        { name: "authorId", referencedColumnName: "id" }
+                        { name: "authorId", referencedColumnName: "id", foreignKeyConstraintName: "post_author_fk" }
                     ],
                     relatedTable: "PostAuthor",
                     relationType: "ManyToOne"

@@ -432,7 +432,7 @@ export default class SqliteDriver extends AbstractDriver {
             this.db.serialize(() => {
                 this.db.all(sql, [], (err, row) => {
                     if (!err) {
-                        ret = row;
+                        ret = row as T[];
                         resolve(true);
                     } else {
                         TomgUtils.LogError(

@@ -12,6 +12,7 @@
     "stripInternal": true,
     "strictNullChecks": true,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "newLine": "LF",
     "outDir": "dist",
     "lib": [

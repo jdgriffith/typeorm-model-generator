@@ -9,8 +9,8 @@ import IGenerationOptions, {
 } from "./IGenerationOptions";
 import fs = require("fs-extra");
 
-import inquirer = require("inquirer");
-import path = require("path");
+import inquirer from 'inquirer';
+import path from 'path'
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 CliLogic();
@@ -298,7 +298,7 @@ function checkYargsParameters(options: options): options {
             default: options.generationOptions.exportType === "default",
             describe: "Generate index file",
         },
-    });
+    }) as any;
 
     options.connectionOptions.databaseNames = argv.d.split(",");
     options.connectionOptions.databaseType = argv.e;
